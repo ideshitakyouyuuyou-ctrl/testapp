@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>イデシタのなんでもレシピ</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Segoe UI",sans-serif;
+    color:#fff;
+
+    background:
+
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.12) 0 3px, transparent 4px),
+    radial-gradient(circle at 80% 40%, rgba(255,255,255,0.12) 0 3px, transparent 4px),
+    radial-gradient(circle at 30% 75%, rgba(255,255,255,0.10) 0 4px, transparent 5px),
+
+    repeating-linear-gradient(
+        -45deg,
+        rgba(255,255,255,0.03) 0px,
+        rgba(255,255,255,0.03) 8px,
+        transparent 8px,
+        transparent 28px
+    ),
+
+    linear-gradient(
+        135deg,
+        #031b11 0%,
+        #064e2d 20%,
+        #0b7a45 45%,
+        #10a64f 70%,
+        #5eff77 100%
+    );
+
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+}
+
+body::before{
+    content:"";
+
+    position:fixed;
+    inset:0;
+
+    background:
+    radial-gradient(circle at 15% 15%, rgba(174,255,0,0.35), transparent 20%),
+    radial-gradient(circle at 85% 25%, rgba(255,255,255,0.18), transparent 15%),
+    radial-gradient(circle at 70% 85%, rgba(132,255,0,0.30), transparent 20%),
+
+    linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255,255,255,0.08) 48%,
+        transparent 52%
+    );
+
+    mix-blend-mode:screen;
+    pointer-events:none;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:20px 16px;
+    position:relative;
+    z-index:2;
+}
+
+h1{
+    text-align:center;
+
+    font-size:clamp(28px,6vw,58px);
+
+    font-weight:900;
+
+    color:#d9ff00;
+
+    letter-spacing:1px;
+
+    white-space:nowrap;
+
+    text-shadow:
+        0 3px 0 #000,
+        0 8px 20px rgba(0,0,0,0.5);
+
+    margin-bottom:8px;
+}
+
+.sub{
+    text-align:center;
+
+    font-size:clamp(14px,3.6vw,20px);
+
+    font-weight:bold;
+
+    margin-bottom:24px;
+
+    white-space:nowrap;
+
+    text-shadow:0 2px 6px rgba(0,0,0,0.5);
+}
+
+.card{
+    background:rgba(255,255,255,0.94);
+
+    color:#222;
+
+    border-radius:24px;
+
+    padding:22px;
+
+    border:4px solid #111;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.35),
+        0 0 0 6px rgba(255,255,255,0.12);
+
+    position:relative;
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+
+    position:absolute;
+
+    top:-50px;
+    right:-50px;
+
+    width:150px;
+    height:150px;
+
+    background:
+    radial-gradient(circle,#d9ff00 0%,transparent 70%);
+
+    opacity:0.35;
+}
+
+.card p{
+    font-size:clamp(14px,4vw,18px);
+
+    line-height:1.7;
+
+    margin-bottom:16px;
+}
+
+textarea{
+    width:100%;
+    height:130px;
+
+    border:none;
+    border-radius:18px;
+
+    padding:18px;
+
+    font-size:16px;
+
+    resize:none;
+
+    background:#f7fff7;
+
+    box-shadow:
+        inset 0 2px 10px rgba(0,0,0,0.12);
+}
+
+textarea:focus{
+    outline:none;
+
+    box-shadow:
+        0 0 0 5px #84ff00,
+        inset 0 2px 10px rgba(0,0,0,0.1);
+}
+
+button{
+    width:100%;
+
+    margin-top:18px;
+
+    padding:18px;
+
+    border:none;
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #0a7a33,
+        #38d000
+    );
+
+    color:white;
+
+    font-size:clamp(18px,5vw,26px);
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    transition:0.2s;
+
+    letter-spacing:1px;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.35),
+        inset 0 2px 0 rgba(255,255,255,0.3);
+}
+
+button:hover{
+    transform:
+        translateY(-4px)
+        scale(1.02);
+
+    background:
+    linear-gradient(
+        135deg,
+        #11a344,
+        #72ff00
+    );
+}
+
+.recipe{
+    margin-top:24px;
+
+    animation:fadeIn 0.4s ease;
+}
+
+.recipe h2{
+    color:#0d7c34;
+
+    font-size:clamp(24px,6vw,36px);
+
+    margin-bottom:15px;
+}
+
+.tag{
+    display:inline-block;
+
+    background:
+    linear-gradient(
+        135deg,
+        #84ff00,
+        #d9ff00
+    );
+
+    color:#111;
+
+    font-weight:900;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    margin:5px;
+
+    font-size:14px;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.15);
+}
+
+.info{
+    background:#efffe8;
+
+    border-left:8px solid #38d000;
+
+    padding:16px;
+
+    border-radius:16px;
+
+    margin-top:20px;
+    margin-bottom:20px;
+
+    font-size:clamp(14px,4vw,18px);
+}
+
+.recipe h3{
+    color:#0d7c34;
+
+    margin-bottom:10px;
+
+    font-size:clamp(22px,5vw,28px);
+}
+
+.steps{
+    line-height:2;
+
+    font-size:clamp(14px,4vw,18px);
+}
+
+.footer{
+    text-align:center;
+
+    margin-top:32px;
+
+    font-size:12px;
+
+    opacity:0.8;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* スマホ最適化 */
+@media (max-width:600px){
+
+    .container{
+        padding:14px;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:20px;
+    }
+
+    textarea{
+        height:120px;
+        font-size:15px;
+    }
+
+    button{
+        padding:16px;
+    }
+
+    .tag{
+        font-size:12px;
+        padding:7px 12px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🍳 イデシタのなんでもレシピ</h1>
+
+    <div class="sub">
+        食材を入力するだけで簡単レシピ！
+    </div>
+
+    <div class="card">
+
+        <p>
+            冷蔵庫の食材等を自由に入力してください。<br>
+            例：卵、玉ねぎ、豚肉、キャベツ
+        </p>
+
+        <textarea id="ingredients" placeholder="卵、豚肉、キャベツ"></textarea>
+
+        <button onclick="generateRecipe()">
+            ⚡ レシピを提案
+        </button>
+
+    </div>
+
+    <div id="result"></div>
+
+    <div class="footer">
+
+    </div>
+
+</div>
+
+<script>
+
+function generateRecipe(){
+
+    const input = document.getElementById("ingredients").value;
+
+    if(input.trim() === ""){
+        alert("食材を入力してください！");
+        return;
+    }
+
+    const ingredients = input
+        .split(/、|,|\\s+/)
+        .filter(v => v);
+
+    let recipeName = "";
+    let recipeText = "";
+    let cookingTime = "";
+    let calories = "";
+
+    if(
+        ingredients.includes("卵") &&
+        ingredients.includes("キャベツ")
+    ){
+
+        recipeName = "ふわとろ卵の豚キャベツ炒め";
+
+        cookingTime = "15分";
+
+        calories = "約450kcal";
+
+        recipeText = `
+        ① 玉ねぎと豚肉を食べやすい大きさに切ります。<br>
+        ② フライパンで豚肉と玉ねぎを炒めます。<br>
+        ③ キャベツを加えてさらに炒めます。<br>
+        ④ 溶き卵を回し入れ、ふわっと仕上げます。<br>
+        ⑤ 塩コショウで味を整えたら完成！
+        `;
+
+    }else if(ingredients.includes("卵")){
+
+        recipeName = "スタミナオムレツ炒め";
+
+        cookingTime = "12分";
+
+        calories = "約380kcal";
+
+        recipeText = `
+        ① 食材を一口サイズに切ります。<br>
+        ② フライパンで具材を炒めます。<br>
+        ③ 卵を流し込み半熟に仕上げます。<br>
+        ④ ケチャップをかけて完成！
+        `;
+
+    }else if(ingredients.includes("キャベツ")){
+
+        recipeName = "シャキシャキキャベツ炒め";
+
+        cookingTime = "10分";
+
+        calories = "約320kcal";
+
+        recipeText = `
+        ① キャベツをざく切りにします。<br>
+        ② 強火で一気に炒めます。<br>
+        ③ 醤油と塩コショウで味付け。<br>
+        ④ ご飯にもお酒にも合う一品！
+        `;
+
+    }else{
+
+        recipeName = "オリジナル創作炒め";
+
+        cookingTime = "14分";
+
+        calories = "約400kcal";
+
+        recipeText = `
+        ① 食材を切ります。<br>
+        ② フライパンで炒めます。<br>
+        ③ 塩コショウ＋醤油で味付け。<br>
+        ④ ごま油を加えると更に美味しい！
+        `;
+    }
+
+    let tagsHTML = "";
+
+    ingredients.forEach(item => {
+
+        tagsHTML += `
+        <span class="tag">${item}</span>
+        `;
+
+    });
+
+    document.getElementById("result").innerHTML = `
+
+        <div class="card recipe">
+
+            <h2>🍽 ${recipeName}</h2>
+
+            <div>
+                ${tagsHTML}
+            </div>
+
+            <div class="info">
+                ⏰ 調理時間：${cookingTime}<br>
+                🔥 推定カロリー：${calories}
+            </div>
+
+            <h3>👨‍🍳 作り方</h3>
+
+            <div class="steps">
+                ${recipeText}
+            </div>
+
+        </div>
+
+    `;
+}
+
+</script>
+
+</body>
+</html>
